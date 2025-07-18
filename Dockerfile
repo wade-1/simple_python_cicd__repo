@@ -14,11 +14,8 @@ COPY . .
 # 创建实例文件夹
 RUN mkdir -p instance
 
-# 初始化数据库
-RUN python init_db.py
-
 # 暴露端口
 EXPOSE 5000
 
-# 启动命令
-CMD ["python", "wsgi.py"]
+# 注意：移除了数据库初始化步骤
+# 数据库初始化将在首次运行时手动执行

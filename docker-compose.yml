@@ -5,4 +5,11 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - .:/app
+      - ./app:/app/app
+      - ./wsgi.py:/app/wsgi.py
+      - ./init_db.py:/app/init_db.py
+      - ./requirements.txt:/app/requirements.txt
+      - ./instance:/app/instance
+    environment:
+      FLASK_APP: wsgi.py
+    command: python wsgi.py

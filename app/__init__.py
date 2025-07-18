@@ -1,6 +1,6 @@
-import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+import os
 
 db = SQLAlchemy()
 
@@ -24,7 +24,7 @@ def create_app():
     # 初始化扩展
     db.init_app(app)
     
-    # 注册蓝图
+    # 注册蓝图（延迟导入避免循环依赖）
     from . import routes
     app.register_blueprint(routes.bp)
     
