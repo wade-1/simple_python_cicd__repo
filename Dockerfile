@@ -11,11 +11,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 复制应用代码
 COPY . .
 
+# 创建实例文件夹
+RUN mkdir -p instance
+
 # 初始化数据库
-RUN python -c "from app import db; db.create_all()"
+RUN python init_db.py
 
 # 暴露端口
 EXPOSE 5000
 
 # 启动命令
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["python", "wsgi.py"]

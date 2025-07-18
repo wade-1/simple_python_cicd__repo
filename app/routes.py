@@ -1,13 +1,15 @@
-from flask import render_template, request, redirect, url_for
-from app import app, db
-from app.models import Employee
+from flask import Blueprint, render_template, request, redirect, url_for
+from . import db
+from .models import Employee
 
-@app.route('/')
+bp = Blueprint('main', __name__)
+
+@bp.route('/')
 def index():
     employees = Employee.query.all()
     return render_template('index.html', employees=employees)
 
-@app.route('/add', methods=['POST'])
+@bp.route('/add', methods=['POST'])
 def add_employee():
     name = request.form['name']
     position = request.form['position']
@@ -16,4 +18,4 @@ def add_employee():
     new_employee = Employee(name=name, position=position, department=department)
     db.session.add(new_employee)
     db.session.commit()
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))
