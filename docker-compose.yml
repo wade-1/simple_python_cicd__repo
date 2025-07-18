@@ -12,4 +12,5 @@ services:
       - ./instance:/app/instance
     environment:
       FLASK_APP: wsgi.py
+      FLASK_ENV: development  # 添加开发环境变量
     command: python wsgi.py

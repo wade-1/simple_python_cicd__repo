@@ -17,5 +17,5 @@ RUN mkdir -p instance
 # 暴露端口
 EXPOSE 5000
 
-# 注意：移除了数据库初始化步骤
-# 数据库初始化将在首次运行时手动执行
+# 启动命令
+CMD ["python", "wsgi.py"]

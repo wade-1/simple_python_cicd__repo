@@ -1,5 +1,4 @@
 from app import create_app, db
-from app.models import Employee
 import os
 
 app = create_app()
@@ -7,7 +6,8 @@ app = create_app()
 @app.cli.command("init-db")
 def init_db():
     """Initialize the database."""
-    db.create_all()
+    with app.app_context():
+        db.create_all()
     print("Database initialized.")
 
 # 检查数据库是否已初始化
@@ -22,4 +22,5 @@ if __name__ == '__main__':
         with app.app_context():
             db.create_all()
     
-    app.run()
+    # 关键修改：指定监听所有网络接口
+    app.run(host='0.0.0.0', port=5000)
