@@ -1,12 +1,16 @@
 import pytest
-from app import app, db
+from app import create_app
 
 
 @pytest.fixture
-def client():
+def app():
+    # 创建测试应用实例
+    app = create_app()
     app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    with app.test_client() as client:
-        with app.app_context():
-            db.create_all()
-        yield client
+    return app
+
+# 替换旧的 _request_ctx_stack 使用
+@pytest.fixture
+def client(app):
+    with app.test_request_context():
+        yield app.test_client()
