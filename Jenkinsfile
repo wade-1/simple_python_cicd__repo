@@ -20,6 +20,7 @@ pipeline {
                     bat 'python -m venv venv'
                     bat '.\\venv\\Scripts\\activate'
                     bat 'pip install -r requirements.txt'
+                    bat 'pip install --upgrade pytest-flask flask'
                 }
             }
         }
