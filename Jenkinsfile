@@ -4,6 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = "employee-manager"
         CONTAINER_NAME = "employee-web"
+        GIT_SSH_COMMAND = 'ssh -o StrictHostKeyChecking=no'
     }
 
     stages {
