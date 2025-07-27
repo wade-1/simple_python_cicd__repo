@@ -20,8 +20,26 @@ pipeline {
                     // 创建并激活虚拟环境
                     bat 'python -m venv venv'
                     bat '.\\venv\\Scripts\\activate'
-                    bat 'pip install -r requirements.txt'
-                    bat 'pip install --upgrade pytest-flask flask'
+                    def mirrors = [
+                        'https://mirrors.aliyun.com/pypi/simple',
+                        'https://mirrors.cloud.tencent.com/pypi/simple',
+                        'https://pypi.org/simple'
+                    ]
+                    for (mirror in mirrors) {
+                        try {
+                            bat "pip install --retries 5 --timeout 30 -r requirements.txt -i ${mirror}"
+                            bat 'pip install --retries 5 --timeout 30 --upgrade pytest-flask flask -i ${mirror}'
+                            success = true
+                            break
+                        } catch (e) {
+                            echo "Mirror ${mirror} failed, trying next..."
+                        }
+                    }
+                    
+                    if (!success) {
+                        error "All mirrors failed!"
+                    }
+                    def success = false
                 }
             }
         }
