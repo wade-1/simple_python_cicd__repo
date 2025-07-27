@@ -1,10 +1,5 @@
 import pytest
 from app import create_app
-import flask
-from flask.globals import _app_ctx_stack
-
-if not hasattr(flask, '_request_ctx_stack'):
-    flask._request_ctx_stack = _app_ctx_stack
 
 
 @pytest.fixture
