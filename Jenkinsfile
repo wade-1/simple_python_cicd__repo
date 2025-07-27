@@ -64,6 +64,7 @@ pipeline {
             steps {
                 script {
                     // 使用当前构建ID作为镜像标签
+                    // need to ensure that the Docker daemon is running
                     docker.build("${env.DOCKER_IMAGE}:${env.BUILD_ID}")
                 }
             }
