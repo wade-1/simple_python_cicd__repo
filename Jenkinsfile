@@ -74,8 +74,8 @@ pipeline {
             steps {
                 script {
                     // 停止并移除旧容器
-                    bat "docker stop ${env.CONTAINER_NAME} 2>nul || echo Container not found."
-                    bat "docker rm ${env.CONTAINER_NAME} 2>nul || echo Container not found."
+                    bat "docker stop ${env.CONTAINER_NAME} 2>nul || exit 0"
+                    bat "docker rm ${env.CONTAINER_NAME} 2>nul || exit 0"
                     
                     // 运行新容器
                     docker.image("${env.DOCKER_IMAGE}:${env.BUILD_ID}").run(
@@ -90,7 +90,7 @@ pipeline {
         always {
             script {
                 // 清理：删除临时镜像
-                bat "docker rmi ${env.DOCKER_IMAGE}:${env.BUILD_ID} || true"
+                bat "docker rmi ${env.DOCKER_IMAGE}:${env.BUILD_ID} || exit 0"
                 // 清理虚拟环境
                 bat 'rmdir /s /q venv'
             }
