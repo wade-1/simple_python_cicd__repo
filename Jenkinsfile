@@ -74,8 +74,8 @@ pipeline {
             steps {
                 script {
                     // 停止并移除旧容器
-                    bat "docker stop ${env.CONTAINER_NAME} || true"
-                    bat "docker rm ${env.CONTAINER_NAME} || true"
+                    bat "docker stop ${env.CONTAINER_NAME} 2>nul || echo Container not found."
+                    bat "docker rm ${env.CONTAINER_NAME} 2>nul || echo Container not found."
                     
                     // 运行新容器
                     docker.image("${env.DOCKER_IMAGE}:${env.BUILD_ID}").run(
