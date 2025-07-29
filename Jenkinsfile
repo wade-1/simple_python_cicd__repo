@@ -73,10 +73,19 @@ pipeline {
         stage('Deploy to Docker') {
             steps {
                 script {
-                    // 停止并移除旧容器
-                    bat "docker stop ${env.CONTAINER_NAME} 2>nul || exit 0"
-                    bat "docker rm ${env.CONTAINER_NAME} 2>nul || exit 0"
-                    
+                    // 检查容器是否在运行
+                    def isRunning = bat(
+                        script: "docker ps -q --filter name=${env.CONTAINER_NAME}", 
+                        returnStdout: true
+                    ).trim()
+                    if (isRunning) {
+                        bat "docker stop ${env.CONTAINER_NAME}"
+                        bat "docker rm ${env.CONTAINER_NAME}"
+                    } else {
+                        echo "容器 ${env.CONTAINER_NAME} 未运行，跳过停止操作"
+                        // 清理可能存在的停止状态容器
+                        bat "docker rm ${env.CONTAINER_NAME} 2>nul || exit 0"
+                    }
                     // 运行新容器
                     docker.image("${env.DOCKER_IMAGE}:${env.BUILD_ID}").run(
                         "--name ${env.CONTAINER_NAME} -d -p 5000:5000"
